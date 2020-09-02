@@ -80,9 +80,14 @@ function App() {
               <div className="date">{dateBuilder(new Date())}</div>
             </div>
             <div className="weather-box">
-              <div className="temp">{Math.round(weather.main.temp)}</div>
+              <div className="temp">
+                {Math.round(weather.main.temp)} Fahrenheit
+              </div>
+
+              <div className="temp">
+                {Math.round(weather.main.humidity)} Humidity
+              </div>
               <div className="weather">{weather.weather[0].main}</div>
-              <div className="humidity">{weather.weather[0].humidity}</div>
             </div>
           </div>
         ) : (
