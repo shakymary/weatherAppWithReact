@@ -1,19 +1,40 @@
 import React, { useState } from "react";
 import api from "./config";
+// import { query } from "express";
 
 function App() {
   const [query, setQuery] = useState("");
   const [weather, setWeather] = useState({});
+
+  function getForecast(query) {
+    fetch(`${api.url}forecast?q=${query}&units=imperial&APPID=${api.key}`)
+      .then((res) => res.json())
+      .then((result) => {
+        // console.log(result);
+        // console.log(result.list[2].main.temp);
+        // console.log(result.list[2].main.humidity);
+        // console.log("forecast");
+
+        for (let i = 0; i < result.list.length; i++) {
+          if (result.list[i].dt_txt.includes("03:00:00")) {
+            console.log(result.list[i].main.temp);
+            console.log(result.list[i].main.humidity);
+          }
+        }
+      });
+  }
 
   const search = (event) => {
     if (event.key === "Enter") {
       fetch(`${api.url}weather?q=${query}&units=imperial&APPID=${api.key}`)
         .then((res) => res.json())
         .then((result) => {
+          console.log(result);
           setWeather(result);
           setQuery("");
           console.log(weather);
         });
+      getForecast(query);
     }
   };
 
@@ -89,6 +110,22 @@ function App() {
               </div>
               <div className="weather">{weather.weather[0].main}</div>
             </div>
+            <div className="weather-box">
+              <div className="temp">
+                {Math.round(weather.wind.speed)} Windspeed
+              </div>
+              <div className="temp">
+                <img
+                  src={
+                    "https://api.openweathermap.org/img/w/" +
+                    weather.weather[0].icon +
+                    ".png"
+                  }
+                ></img>
+                Icon
+              </div>
+              <div className="weather">{weather.weather[0].main}</div>
+            </div>
           </div>
         ) : (
           ""
@@ -97,6 +134,7 @@ function App() {
     </div>
   );
 }
+
 // import "./App.css";
 // import "bootstrap/dist/css/bootstrap.min.css";
 // import { render } from "@testing-library/react";
